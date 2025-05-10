@@ -1,0 +1,13 @@
+prvotni init
+docker run -it --rm \
+  -v "/home/vojtech/Documents/aaa_programovani/attentid-eth-sit-docker/geth_data_docker:/app/geth-data" \
+  ethereum/client-go:v1.13.15 --datadir /app/geth-data account new
+
+
+
+
+dalsi inicializace
+docker run -it --rm \
+  -v "/home/vojtech/Documents/aaa_programovani/attentid-eth-sit-docker/geth_data_docker:/app/geth-data" \
+  -v "/home/vojtech/Documents/aaa_programovani/attentid-eth-sit-docker/genesis.json:/app/genesis.json" \
+  ethereum/client-go:v1.13.15 --datadir /app/geth-data init /app/genesis.json

@@ -1,0 +1,12 @@
+# Geth data directory
+geth_data_docker/
+
+# Python virtual environment
+venv/
+*.pyc
+__pycache__/
+
+# IDE and OS specific files
+.idea/
+.vscode/
+*.DS_Store
