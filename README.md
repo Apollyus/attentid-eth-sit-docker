@@ -1,4 +1,4 @@
-# Proof of Concept: Lokální Ethereum Blockchain pro Ukládání Hašů
+# Proof of Concept: Lokální Ethereum Blockchain pro ukládání zahashovaných dat
 
 Tento projekt slouží jako Proof of Concept (PoC) pro vytvoření soukromého, lokálního Ethereum blockchainu běžícího na Proof-of-Work (PoW) konsenzu. Umožňuje nasazení a interakci se smart kontraktem navrženým pro ukládání hašů dat s řízeným přístupem k zápisu.
 
@@ -61,7 +61,12 @@ Nastavení a provoz soukromého Ethereum blockchainu s PoW konsenzem a nasazení
 3. Spusťte Geth node:
 
    ```bash
-   docker run -it --name eth_node -v "$(pwd)/geth_data_docker:/app/geth-data" -p 8545:8545 ethereum/client-go:v1.10.26 --http --mine
+   docker run -it --name my_local_geth_node -v "$(pwd)/geth_data_docker:/app/geth-data" -p 8545:8545 ethereum/client-go:v1.10.26 --http --http.addr "0.0.0.0" --http.api "eth,net,web3,personal,miner" --mine --miner.threads 1 --allow-insecure-unlock
+   ```
+4. Připojte se k JavaScript konzoli Geth:
+
+   ```bash
+   docker exec -it my_local_geth_node geth attach ipc:///app/geth-data/geth.ipc
    ```
 
 ## Nasazení Smart Kontraktu
@@ -80,5 +85,5 @@ Nastavení a provoz soukromého Ethereum blockchainu s PoW konsenzem a nasazení
 * Ukončení nodu:
 
   ```bash
-  docker stop eth_node
+  docker stop my_local_geth_node
   ```

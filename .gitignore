@@ -1,5 +1,5 @@
 # Geth data directory
-geth_data_docker/
+
 
 # Python virtual environment
 venv/
