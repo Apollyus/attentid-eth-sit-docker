@@ -9,7 +9,7 @@ docker run -it --name my_local_geth_node \
     --networkid 12345 \
     --nodiscover \
     --mine \
-    --miner.etherbase "0xE8027148Da1726e6C8dd176f034008E4921D6Fc0" \
+    --miner.etherbase "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4" \
     --http \
     --http.addr "0.0.0.0" \
     --http.port 8545 \

@@ -1,35 +1,62 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0; // Nebo novější, např. ^0.8.20
+pragma solidity ^0.8.0;
 
-contract HashStorage {
+contract StringStorage {
     address public owner;
-    mapping(uint256 => bytes32) public storedHashes;
-    uint256 public hashCount;
+    mapping(uint256 => string) public storedStrings;
+    uint256 public stringCount;
 
-    event HashStored(uint256 indexed id, bytes32 hashValue, address indexed storer);
+    event StringStored(uint256 indexed id, string value, address indexed storer);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     constructor() {
-        owner = msg.sender; // Ten, kdo nasadí kontrakt, bude vlastník
+        owner = msg.sender;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Ownable: caller is not the owner");
+        require(msg.sender == owner, "StringStorage: caller is not the owner");
         _;
     }
 
-    function storeHash(bytes32 _hash) public onlyOwner {
-        hashCount++;
-        storedHashes[hashCount] = _hash;
-        emit HashStored(hashCount, _hash, msg.sender);
+    /**
+     * @dev Stores a string in the contract
+     * @param _value The string to store
+     * @return The ID assigned to the stored string
+     */
+    function storeString(string calldata _value) public onlyOwner returns (uint256) {
+        stringCount++;
+        storedStrings[stringCount] = _value;
+        emit StringStored(stringCount, _value, msg.sender);
+        return stringCount;
     }
 
-    function getHash(uint256 _id) public view returns (bytes32) {
-        require(_id > 0 && _id <= hashCount, "HashStorage: ID out of bounds");
-        return storedHashes[_id];
+    /**
+     * @dev Retrieves a stored string by its ID
+     * @param _id The ID of the string to retrieve
+     */
+    function getString(uint256 _id) public view returns (string memory) {
+        require(_id > 0 && _id <= stringCount, "StringStorage: ID out of bounds");
+        return storedStrings[_id];
     }
 
+    /**
+     * @dev Updates a previously stored string
+     * @param _id The ID of the string to update
+     * @param _newValue The new string value
+     */
+    function updateString(uint256 _id, string calldata _newValue) public onlyOwner {
+        require(_id > 0 && _id <= stringCount, "StringStorage: ID out of bounds");
+        storedStrings[_id] = _newValue;
+        emit StringStored(_id, _newValue, msg.sender);
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new address
+     * @param newOwner The address of the new owner
+     */
     function transferOwnership(address newOwner) public onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(newOwner != address(0), "StringStorage: new owner is the zero address");
+        emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
     }
 }
