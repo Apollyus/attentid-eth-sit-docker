@@ -32,3 +32,42 @@ docker exec -it muj_geth_node_poc geth attach ipc:///app/geth-data/geth.ipc
 -----
 
 contract addres: 0xeEac9DB7ca9eC78612EA4091d050E11b4F4C76a1
+
+
+--------------------------------------------------------------------------------
+
+tezeni na druhe rpi:
+
+enode://7721f8e333a641c34896242f3d78b34e9779226ce2128a90b5de841bb9e0cf456765b67e6841a3e5e4f0b74d1cbe156221e8452c72be8c3516246ac988f8b4eb@192.168.37.205:30303?discport=0
+
+nova adresa:
+0x82A6CEcF5D7441fBe7306615545548916f7632f0
+
+odemknout ucet:
+personal.unlockAccount("0x82A6CEcF5D7441fBe7306615545548916f7632f0", "pixmapixma", 3600)
+
+spusteni tezeni:
+docker run -it --name muj_geth_node_miner2 \
+  -v "$(pwd)/geth_data_node2_docker:/app/geth-data" \
+  -p 8545:8545 \
+  -p 8546:8546 \
+  -p 30303:30303 \
+  -p 30303:30303/udp \
+  ethereum/client-go:v1.10.26 \
+    --datadir /app/geth-data \
+    --networkid 12345 \
+    --bootnodes "enode://7721f8e333a641c34896242f3d78b34e9779226ce2128a90b5de841bb9e0cf456765b67e6841a3e5e4f0b74d1cbe156221e8452c72be8c3516246ac988f8b4eb@192.168.37.205:30303?discport=0" \
+    --mine \
+    --miner.etherbase "0x82A6CEcF5D7441fBe7306615545548916f7632f0" \
+    --http \
+    --http.addr "0.0.0.0" \
+    --http.port 8545 \
+    --http.corsdomain "*" \
+    --http.api "eth,net,web3,personal,miner" \
+    --ws \
+    --ws.addr "0.0.0.0" \
+    --ws.port 8546 \
+    --ws.origins "*" \
+    --ws.api "eth,net,web3,personal,miner" \
+    --allow-insecure-unlock \
+    console
