@@ -1,0 +1,34 @@
+0xbA302F03A4a8515d816b9Ac367cB7A5B6f537C9c
+
+docker run -it --name muj_geth_node_poc \
+  -v "$(pwd)/geth_data_docker:/app/geth-data" \
+  -p 8545:8545 \
+  -p 8546:8546 \
+  -p 30303:30303 \
+  -p 30303:30303/udp \
+  ethereum/client-go:v1.10.26 \
+    --datadir /app/geth-data \
+    --networkid 12345 \
+    --nodiscover \
+    --mine \
+    --miner.etherbase "0xbA302F03A4a8515d816b9Ac367cB7A5B6f537C9c" \
+    --http \
+    --http.addr "0.0.0.0" \
+    --http.port 8545 \
+    --http.corsdomain "*" \
+    --http.api "eth,net,web3,personal,miner" \
+    --ws \
+    --ws.addr "0.0.0.0" \
+    --ws.port 8546 \
+    --ws.origins "*" \
+    --ws.api "eth,net,web3,personal,miner" \
+    --allow-insecure-unlock \
+    console
+
+personal.unlockAccount("0xbA302F03A4a8515d816b9Ac367cB7A5B6f537C9c", "pixmapixma", 3600)
+
+docker exec -it muj_geth_node_poc geth attach ipc:///app/geth-data/geth.ipc
+
+-----
+
+contract addres: 0xeEac9DB7ca9eC78612EA4091d050E11b4F4C76a1
